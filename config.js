@@ -1,5 +1,8 @@
 const mongoose = require("mongoose")
-mongoose.connect("mongodb+srv://adnan12345:adnan123@blogapp.9sg5w0z.mongodb.net/")
+mongoose.connect("mongodb+srv://adnan12345:adnan123@blogapp.9sg5w0z.mongodb.net/blogdb", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 mongoose.connection.on("connected", () => {
     console.log("Connected to MongoDB");
   });

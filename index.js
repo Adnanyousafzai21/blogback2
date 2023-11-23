@@ -106,15 +106,15 @@ app.get("/allblogs", async (req, res) => {
   }
 });
 
-// app.get("/blogs/:fristname", async (req, res) => {
-//   try {
-//     const { fristname } = req.params;
-//     const getdata = await allblogs.find({ fristname: fristname });
-//     res.send(getdata);
-//   } catch (error) {
-//     res.status(500).send("An error occurred while fetching the data.", error);
-//   }
-// });
+app.get("/blogs/:fristname", async (req, res) => {
+  try {
+    const { fristname } = req.params;
+    const getdata = await allblogs.find({ fristname: fristname });
+    res.send(getdata);
+  } catch (error) {
+    res.status(500).send("An error occurred while fetching the data.", error);
+  }
+});
 
 app.delete("/blogs/:id", async (req, res) => {
   try {

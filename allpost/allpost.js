@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const blogshema= new mongoose.Schema({
     title:String,
     discription: String,
-    firstname: String
+    fristname: String
 })
 
 const  allblogs = mongoose.model("allblogs", blogshema)

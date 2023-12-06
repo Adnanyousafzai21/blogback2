@@ -7,7 +7,7 @@ const app = express();
 
 
 const mongoose = require("mongoose")
-mongoose.connect("mongodb+srv://adnan12345:adnan123@blogapp.9sg5w0z.mongodb.net/", {
+mongoose.connect("mongodb://127.0.0.1:27017/Blog", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -26,31 +26,34 @@ app.get("/", (req, res) => {
 app.post("/register", async (req, res) => {
   try {
     const { email, fristname, lastname, password } = req.body;
-    console.log("form frontent",req.body)
+    // console.log("Received registration request from frontend:", req.body);
+
     const emailUnique = await registration.findOne({ email: email });
 
     if (emailUnique) {
+      // console.log("Email already in use:", email);
       res.status(400).json({ status: "failed", message: "Email already in use" });
     } else {
       if (email && fristname && lastname && password) {
         const doc = new registration({
           fristname, lastname, email, password
-
         });
+
         const registeredUser = await doc.save();
-        console.log("from database",registeredUser)
+        // console.log("User registered successfully:", registeredUser);
         res.status(201).json({
           status: "Success",
           message: "Registered successfully",
           user: registeredUser
         });
       } else {
+        // console.log("Validation failed: All fields are required");
         res.status(400).json({ status: "failed", message: "All fields are required" });
       }
     }
-
   } catch (error) {
     if (error.code === 11000 && error.keyPattern.email) {
+      console.log("Email is already in use:", email);
       res.status(400).json({ status: "failed", message: "Email is already in use" });
     } else {
       console.error("Registration error:", error);
@@ -59,13 +62,16 @@ app.post("/register", async (req, res) => {
   }
 });
 
+
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
     if (email && password) {
-      const user = await registration.findOne({ email, password });
-      console.log(user)
+      const user = await registration.findOne({ email });
+      console.log(user);
+      console.log('Login request with email:', email);
+      console.log('User retrieved from the database:', user);
       if (user) {
         res.send({
           message: 'Login successful',
@@ -73,15 +79,17 @@ app.post('/login', async (req, res) => {
         });
       } else {
         res.status(401).send({ message: 'User not found or incorrect credentials' });
+        cosole.log('User not found or incorrect credentials')
       }
     } else {
-      res.status(400).json({ status: "failed", message: "All fields are required" });
+      res.status(400).json({ status: 'failed', message: 'All fields are required' });
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 
 
@@ -109,8 +117,15 @@ app.get("/allblogs", async (req, res) => {
 app.get("/blogs/:fristname", async (req, res) => {
   try {
     const { fristname } = req.params;
+    console.log("/blogs/:fristname", fristname)
     const getdata = await allblogs.find({ fristname: fristname });
-    res.send(getdata);
+    if(getdata && getdata.length >0){
+      res.send(getdata)
+      console.log(getdata)
+    }else{
+      res.send("data not found")
+    }
+   
   } catch (error) {
     res.status(500).send("An error occurred while fetching the data.", error);
   }

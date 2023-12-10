@@ -7,7 +7,7 @@ const app = express();
 
 
 const mongoose = require("mongoose")
-mongoose.connect("mongodb+srv://adnan12345:adnan123@blogapp.9sg5w0z.mongodb.net/", {
+mongoose.connect(`mongodb+srv://adnan123:adnan12345@cluster0.kmmyll1.mongodb.net/Blog`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -15,10 +15,25 @@ mongoose.connection.on("connected", () => {
   console.log("Connected to MongoDB");
 });
 
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
+});
+
 
 
 app.use(express.json());
 app.use(cors());
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', true);
+  next();
+});
+
+
+
 app.get("/", (req, res) => {
 
   res.send({ message: "hello succesfully don" })
@@ -46,6 +61,7 @@ app.post("/register", async (req, res) => {
           message: "Registered successfully",
           user: registeredUser
         });
+        console.log("registerd user",registeredUser)
       } else {
         // console.log("Validation failed: All fields are required");
         res.status(400).json({ status: "failed", message: "All fields are required" });

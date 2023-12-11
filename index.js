@@ -26,13 +26,6 @@ app.use(cors({
   origin:"*"
 }));
 
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//   res.header('Access-Control-Allow-Credentials', true);
-//   next();
-// });
 
 
 
@@ -215,3 +208,4 @@ const PORT = 8001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+server.timeout = 120000;

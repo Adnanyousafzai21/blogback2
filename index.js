@@ -1,4 +1,5 @@
 // require("./config");
+require('dotenv').config()
 const express = require("express");
 const allblogs = require("./allpost/allpost");
 const registration = require("./user/user")
@@ -204,8 +205,8 @@ app.put("/updateblog/:id", async (req, res) => {
 
 
 
-const PORT = 8001;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// const PORT = process.env.PORT
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
-// server.timeout = 120000;
+

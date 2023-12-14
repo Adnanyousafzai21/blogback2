@@ -1,4 +1,4 @@
-// require("./config");
+
 require('dotenv').config()
 const express = require("express");
 const allblogs = require("./allpost/allpost");
@@ -24,7 +24,7 @@ mongoose.connection.on("error", (err) => {
 
 app.use(express.json());
 app.use(cors({
-  origin:"*"
+  origin: "*"
 }));
 
 
@@ -34,7 +34,7 @@ app.get("/", (req, res) => {
 
   res.send({ message: "hello succesfully don" })
 })
-app.post("/register", async (req, res) => {
+app.post("/api/register", async (req, res) => {
   try {
     const { email, fristname, lastname, password } = req.body;
     // console.log("Received registration request from frontend:", req.body);
@@ -57,7 +57,7 @@ app.post("/register", async (req, res) => {
           message: "Registered successfully",
           user: registeredUser
         });
-        console.log("registerd user",registeredUser)
+        console.log("registerd user", registeredUser)
       } else {
         // console.log("Validation failed: All fields are required");
         res.status(400).json({ status: "failed", message: "All fields are required" });
@@ -75,7 +75,7 @@ app.post("/register", async (req, res) => {
 });
 
 
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -106,7 +106,7 @@ app.post('/login', async (req, res) => {
 
 
 
-app.post("/allblogs", async (req, res) => {
+app.post("/api/allblogs", async (req, res) => {
   try {
     const newblog = new allblogs(req.body);
     const saveblog = await newblog.save();
@@ -117,7 +117,7 @@ app.post("/allblogs", async (req, res) => {
     res.status(500).send("An error occurred while saving the product.");
   }
 });
-app.get("/allblogs", async (req, res) => {
+app.get("/api/allblogs", async (req, res) => {
   try {
     const getdata = await allblogs.find();
     res.send(getdata);
@@ -126,24 +126,24 @@ app.get("/allblogs", async (req, res) => {
   }
 });
 
-app.get("/blogs/:fristname", async (req, res) => {
+app.get("/api/blogs/:fristname", async (req, res) => {
   try {
     const { fristname } = req.params;
     console.log("/blogs/:fristname", fristname)
     const getdata = await allblogs.find({ fristname: fristname });
-    if(getdata && getdata.length >0){
+    if (getdata && getdata.length > 0) {
       res.send(getdata)
       console.log(getdata)
-    }else{
+    } else {
       res.send("data not found")
     }
-   
+
   } catch (error) {
     res.status(500).send("An error occurred while fetching the data.", error);
   }
 });
 
-app.delete("/blogs/:id", async (req, res) => {
+app.delete("/api/blogs/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const deletedBlog = await allblogs.deleteOne({ _id: id });
@@ -157,7 +157,7 @@ app.delete("/blogs/:id", async (req, res) => {
   }
 })
 
-app.get("/getupdateblog/:id", async (req, res) => {
+app.get("/api/getupdateblog/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const getdata = await allblogs.findOne({ _id: id });
@@ -172,7 +172,7 @@ app.get("/getupdateblog/:id", async (req, res) => {
 
 })
 
-app.put("/updateblog/:id", async (req, res) => {
+app.put("/api/updateblog/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { title, discription } = req.body;
@@ -198,15 +198,8 @@ app.put("/updateblog/:id", async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-// const PORT = process.env.PORT
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+const PORT = process.env.PORT
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 

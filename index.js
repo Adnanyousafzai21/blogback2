@@ -24,7 +24,8 @@ mongoose.connection.on("error", (err) => {
 
 app.use(express.json());
 app.use(cors({
-  origin: "*"
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }));
 
 
